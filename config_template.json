@@ -1,0 +1,99 @@
+{
+    "log": {
+        "access": "",
+        "error": "",
+        "loglevel": "warning"
+    },
+    "inbounds": [
+        {
+            "tag": "proxy",
+            "port": 23333,
+            "listen": "127.0.0.1",
+            "protocol": "socks",
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            },
+            "settings": {
+                "auth": "noauth",
+                "udp": true
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "tag": "vmess1",
+            "protocol": "vmess",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "x.x.x.x",
+                        "port": 0,
+                        "users": [
+                            {
+                                "id": "xxxx",
+                                "alterId": 0,
+                                "email": "t@t.tt",
+                                "security": "auto"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp"
+            },
+            "mux": {
+                "enabled": false,
+                "concurrency": -1
+            }
+        },
+        {
+            "tag": "shadowsocks1",
+            "protocol": "shadowsocks",
+            "settings": {
+                "servers": [
+                    {
+                        "email": "t@t.tt",
+                        "address": "x.x.x.x",
+                        "port": 0,
+                        "method": "method",
+                        "password": "your_password",
+                        "level": 0
+                    }
+                ]
+            }
+        },
+        {
+            "tag": "direct",
+            "protocol": "freedom",
+            "settings": {}
+        },
+        {
+            "tag": "block",
+            "protocol": "blackhole",
+            "settings": {
+                "response": {
+                    "type": "http"
+                }
+            }
+        }
+    ],
+    "routing": {
+        "balancers": [
+            {
+                "tag": "balancer",
+                "selector": [
+                    "vmess1",
+                    "shadowsocks1"
+                ],
+                "strategy": {
+                    "type": "leastPing"
+                }
+            }
+        ]
+    }
+}

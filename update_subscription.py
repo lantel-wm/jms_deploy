@@ -211,6 +211,11 @@ class V2rayRestarter:
 
 
 if __name__ == "__main__":
+    os.environ["http_proxy"] = ""
+    os.environ["https_proxy"] = ""
+    os.environ["HTTP_PROXY"] = ""
+    os.environ["HTTPS_PROXY"] = ""
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", type=str, required=True, help="Subscription url")
     parser.add_argument("--config-path", type=str, required=True, help="Config path")
